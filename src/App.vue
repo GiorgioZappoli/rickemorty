@@ -10,7 +10,7 @@
 
 <script>
 import HeaderSection from "./HeaderSection.vue";
-import FourDivs from "./FourDivs.vue";
+import FourDivs from "./CardsContainer.vue";
 
 export default {
   components: {

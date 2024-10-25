@@ -5,7 +5,9 @@
         <img :src="card.image" alt="immagine" />
         <div>
           <section>
-            <h2 class="hover-effect">{{ card.name }}</h2>
+            <a class="hover-effect" :href="card.url">
+              <h2>{{ card.name }}</h2>
+            </a>
             <p :class="['status-row', statusClass(card.status)]">
               {{ card.status }} - {{ card.species }}
             </p>
@@ -16,8 +18,8 @@
           </section>
           <section>
             <h5>First seen in:</h5>
-            <a class="hover-effect" href="{{ card.episode[1] }}">{{
-              card.episode[1]
+            <a class="hover-effect" href="{{ card.episode[0] }}">{{
+              card.episode[0]
             }}</a>
           </section>
         </div>
@@ -27,12 +29,29 @@
 </template>
 
 <script>
-import cardsData from "../public/card.json";
+// import cardsData from "../public/card.json";
 export default {
   data() {
     return {
-      cards: cardsData,
+      // cards: cardsData,
+      cards: [],
+      error: null,
     };
+  },
+  mounted() {
+    fetch("https://rickandmortyapi.com/api/character/")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("errore nella richiesta");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        this.cards = this.getRandomCharacters(data.results, 6);
+      })
+      .catch((error) => {
+        this.error = error.message;
+      });
   },
 
   methods: {
@@ -40,6 +59,10 @@ export default {
       if (status === "Alive") return "status-alive";
       if (status === "Dead") return "status-dead";
       else return "status-unknown";
+    },
+    getRandomCharacters(characters, count) {
+      const shuffled = characters.sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, count);
     },
   },
 };
@@ -145,6 +168,11 @@ export default {
 
 .hover-effect:hover {
   color: rgb(255, 152, 0);
+}
+
+.hover-effect {
+  color: inherit;
+  text-decoration: none;
 }
 </style>
 

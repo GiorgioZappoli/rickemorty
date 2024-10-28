@@ -4,11 +4,11 @@
   </header>
 </template>
 
-<script setup>
-import { ref } from "vue";
+<script lang="ts" setup>
+import { ref } from 'vue'
 
-const title = ref();
-title.value = "The Rick And Morty API";
+const title = ref()
+title.value = 'The Rick And Morty API'
 </script>
 
 <style>
@@ -26,8 +26,8 @@ h1 {
   margin: 0%;
   text-align: center;
   font-weight: 900;
-  font-family: -apple-system, "BlinkMacSystemFont", "Segoe UI", "Roboto",
-    "Helvetica", "Arial", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
+  font-family: -apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Roboto',
+    'Helvetica', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol';
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="cards-containers">
-      <div class="holder" v-for="card in cards" :key="card">
+      <div class="holder" v-for="card in cards" :key="card.id">
         <img :src="card.image" alt="immagine" />
         <div>
           <section>
@@ -30,56 +30,79 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from "vue";
+<script lang="ts" setup>
+import { ref, onMounted } from 'vue'
 
-const cards = ref([]);
-const error = ref(null);
+interface Card {
+  id: number
+  image: string
+  url: string
+  name: string
+  status: string
+  species: string
+  location: {
+    url: string
+    name: string
+  }
+  firstEpisode?: {
+    link: string
+    name: string
+  }
+  episode: string[]
+}
+
+interface Episode {
+  url: string
+  name: string
+}
+
+const cards = ref<Card[]>([])
+const error = ref(null)
 
 onMounted(() => {
-  fetch("https://rickandmortyapi.com/api/character/?page=2")
-    .then((response) => {
+  fetch('https://rickandmortyapi.com/api/character/?page=2')
+    .then(response => {
       if (!response.ok) {
-        throw new Error("errore nella richiesta");
+        throw new Error('errore nella richiesta')
       }
-      return response.json();
+      return response.json()
     })
-    .then((data) => {
-      cards.value = data.results;
+    .then(data => {
+      cards.value = data.results
 
       for (let i = 0; i < data.results.length; i++) {
         fetch(cards.value[i].episode[0])
-          .then((response) => {
+          .then(response => {
             if (!response.ok) {
-              throw new Error("errore nella richiesta dell'url");
+              throw new Error("errore nella richiesta dell'url")
             }
-            return response.json();
+            return response.json()
           })
-          .then((data) => {
-            cards.value[i] = cardModifier(cards.value[i], data);
+          .then(data => {
+            cards.value[i] = cardModifier(cards.value[i], data)
           })
-          .catch((er) => {
-            error.value = er.message;
-          });
+          .catch(er => {
+            error.value = er.message
+          })
       }
     })
-    .catch((er) => {
-      error.value = er.message;
-    });
-});
+    .catch(er => {
+      error.value = er.message
+    })
+})
 
-function statusClass(status) {
-  if (status === "Alive") return "status-alive";
-  if (status === "Dead") return "status-dead";
-  else return "status-unknown";
+function statusClass(status: string) {
+  if (status === 'Alive') return 'status-alive'
+  if (status === 'Dead') return 'status-dead'
+  else return 'status-unknown'
 }
 
-function cardModifier(card, episode) {
+function cardModifier(card: Card, episode: Episode) {
   card = {
     ...card,
     firstEpisode: { link: episode.url, name: episode.name },
-  };
-  return card;
+  }
+  return card
 }
 </script>
 
@@ -109,9 +132,9 @@ function cardModifier(card, episode) {
   background-color: rgb(50, 55, 65);
   color: white;
   border-radius: 15px;
-  font-family: -apple-system, "BlinkMacSystemFont", "Segoe UI", "Roboto",
-    "Helvetica", "Arial", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
+  font-family: -apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Roboto',
+    'Helvetica', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol';
   font-size: large;
 }
 
@@ -158,7 +181,7 @@ function cardModifier(card, episode) {
 }
 
 .holder div section p::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 50%;

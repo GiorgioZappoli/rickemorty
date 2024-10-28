@@ -1,16 +1,16 @@
 <template>
   <div class="app-container">
-    <!-- <HeaderSection></HeaderSection>
+    <HeaderSection></HeaderSection>
 
     <div class="lower-section">
-      <FourDivs :cardsData="cardsData"></FourDivs>
-    </div> -->
+      <FourDivs></FourDivs>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// import HeaderSection from './HeaderSection.vue'
-// import FourDivs from './CardsContainer.vue'
+import HeaderSection from './components/HeaderSection.vue'
+import FourDivs from './components/CardsContainer.vue'
 </script>
 
 <style>

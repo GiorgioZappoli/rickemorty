@@ -4,14 +4,11 @@
   </header>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      title: "The Rick And Morty API",
-    };
-  },
-};
+<script setup>
+import { ref } from "vue";
+
+const title = ref();
+title.value = "The Rick And Morty API";
 </script>
 
 <style>

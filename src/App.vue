@@ -8,16 +8,9 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import HeaderSection from "./HeaderSection.vue";
 import FourDivs from "./CardsContainer.vue";
-
-export default {
-  components: {
-    HeaderSection,
-    FourDivs,
-  },
-};
 </script>
 
 <style>

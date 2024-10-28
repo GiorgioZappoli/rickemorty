@@ -14,11 +14,13 @@
           </section>
           <section>
             <h5>Last known location:</h5>
-            <p class="hover-effect">{{ card.location.name }}</p>
+            <a class="hover-effect" :href="card.location.url">{{
+              card.location.name
+            }}</a>
           </section>
           <section v-if="card.firstEpisode">
             <h5>First seen in:</h5>
-            <a class="hover-effect" href="{{ card.firstEpisode.link }}">
+            <a class="hover-effect" :href="card.firstEpisode.link">
               {{ card.firstEpisode.name }}
             </a>
           </section>
@@ -28,65 +30,57 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      cards: [],
-      error: null,
-    };
-  },
-  mounted() {
-    fetch("https://rickandmortyapi.com/api/character/")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("errore nella richiesta");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        this.cards = data.results;
+<script setup>
+import { ref, onMounted } from "vue";
 
-        for (let i = 0; i < data.results.length; i++) {
-          fetch(this.cards[i].episode[0])
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("errore nella richiesta dell'url");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              this.cards[i] = this.cardModifier(this.cards[i], data);
-            })
-            .catch((error) => {
-              this.error = error.message;
-            });
-        }
-      })
-      .catch((error) => {
-        this.error = error.message;
-      });
-  },
+const cards = ref([]);
+const error = ref(null);
 
-  methods: {
-    statusClass(status) {
-      if (status === "Alive") return "status-alive";
-      if (status === "Dead") return "status-dead";
-      else return "status-unknown";
-    },
-    getRandomCharacters(characters, count) {
-      const shuffled = characters.sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, count);
-    },
-    cardModifier(card, episode) {
-      card = {
-        ...card,
-        firstEpisode: { link: episode.url, name: episode.name },
-      };
-      return card;
-    },
-  },
-};
+onMounted(() => {
+  fetch("https://rickandmortyapi.com/api/character/?page=2")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("errore nella richiesta");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      cards.value = data.results;
+
+      for (let i = 0; i < data.results.length; i++) {
+        fetch(cards.value[i].episode[0])
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("errore nella richiesta dell'url");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            cards.value[i] = cardModifier(cards.value[i], data);
+          })
+          .catch((er) => {
+            error.value = er.message;
+          });
+      }
+    })
+    .catch((er) => {
+      error.value = er.message;
+    });
+});
+
+function statusClass(status) {
+  if (status === "Alive") return "status-alive";
+  if (status === "Dead") return "status-dead";
+  else return "status-unknown";
+}
+
+function cardModifier(card, episode) {
+  card = {
+    ...card,
+    firstEpisode: { link: episode.url, name: episode.name },
+  };
+  return card;
+}
 </script>
 
 <style scoped>
@@ -124,6 +118,9 @@ export default {
 .holder div {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .holder div section {

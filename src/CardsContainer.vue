@@ -16,11 +16,11 @@
             <h5>Last known location:</h5>
             <p class="hover-effect">{{ card.location.name }}</p>
           </section>
-          <section>
+          <section v-if="card.firstEpisode">
             <h5>First seen in:</h5>
-            <a class="hover-effect" href="{{ card.episode[0] }}">{{
-              card.episode[0]
-            }}</a>
+            <a class="hover-effect" href="{{ card.firstEpisode.link }}">
+              {{ card.firstEpisode.name }}
+            </a>
           </section>
         </div>
       </div>
@@ -29,11 +29,9 @@
 </template>
 
 <script>
-// import cardsData from "../public/card.json";
 export default {
   data() {
     return {
-      // cards: cardsData,
       cards: [],
       error: null,
     };
@@ -47,7 +45,23 @@ export default {
         return response.json();
       })
       .then((data) => {
-        this.cards = this.getRandomCharacters(data.results, 6);
+        this.cards = data.results;
+
+        for (let i = 0; i < data.results.length; i++) {
+          fetch(this.cards[i].episode[0])
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("errore nella richiesta dell'url");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              this.cards[i] = this.cardModifier(this.cards[i], data);
+            })
+            .catch((error) => {
+              this.error = error.message;
+            });
+        }
       })
       .catch((error) => {
         this.error = error.message;
@@ -63,6 +77,13 @@ export default {
     getRandomCharacters(characters, count) {
       const shuffled = characters.sort(() => 0.5 - Math.random());
       return shuffled.slice(0, count);
+    },
+    cardModifier(card, episode) {
+      card = {
+        ...card,
+        firstEpisode: { link: episode.url, name: episode.name },
+      };
+      return card;
     },
   },
 };
@@ -175,5 +196,3 @@ export default {
   text-decoration: none;
 }
 </style>
-
-<!-- https://css-tricks.com/snippets/css/complete-guide-grid/ -->

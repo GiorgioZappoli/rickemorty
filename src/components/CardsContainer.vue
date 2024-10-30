@@ -7,8 +7,24 @@
         :card="card"
       ></CardsComponent>
     </div>
-    <button class="prev button">Prev</button>
-    <button class="next button">Next</button>
+    <div class="button-container">
+      <button></button>
+      <button
+        :disabled="!page.prev"
+        class="prev"
+        @click="page.prev && getCards(page.prev)"
+      >
+        Prev
+      </button>
+      <button
+        :disabled="!page.next"
+        class="next"
+        @click="page.next && getCards(page.next)"
+      >
+        Next
+      </button>
+      <button></button>
+    </div>
   </div>
 </template>
 
@@ -80,7 +96,12 @@ function cardModifier(card: Card, episode: Episode) {
 <style scoped>
 .wrapper {
   background-color: #21242b;
-  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 50px 0;
 }
 
 .cards-containers {
@@ -90,9 +111,35 @@ function cardModifier(card: Card, episode: Episode) {
   grid-gap: 30px;
   background-color: #21242b;
   width: 80%;
-  height: auto;
-  margin: auto;
   padding-top: 100px;
   padding-bottom: 100px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+button {
+  background-color: #3498db;
+  color: white;
+  border: 3px solid black;
+  padding: 20px 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 5px;
+  flex: 1;
+  max-width: 200px;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+button:disabled {
+  background-color: grey;
+  color: #bdc3c7;
+  cursor: not-allowed;
 }
 </style>

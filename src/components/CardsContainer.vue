@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <h2></h2>
     <div class="cards-containers">
       <CardsComponent
         v-for="card in cards"
@@ -8,7 +9,14 @@
       ></CardsComponent>
     </div>
     <div class="button-container">
-      <button></button>
+      <button
+        :disabled="!page.prev"
+        @click="
+          getCards(`https://rickandmortyapi.com/api/character/?page=${1}`)
+        "
+      >
+        First
+      </button>
       <button
         :disabled="!page.prev"
         class="prev"
@@ -23,7 +31,16 @@
       >
         Next
       </button>
-      <button></button>
+      <button
+        :disabled="!page.next"
+        @click="
+          getCards(
+            `https://rickandmortyapi.com/api/character/?page=${page.pages}`,
+          )
+        "
+      >
+        Last
+      </button>
     </div>
   </div>
 </template>
@@ -41,6 +58,7 @@ interface Episode {
 type Page = {
   next?: string
   prev?: string
+  pages?: number
 }
 
 const cards = ref<Card[]>([])
@@ -48,7 +66,7 @@ const error = ref(null)
 const page = ref<Page>({})
 
 onMounted(() => {
-  getCards('https://rickandmortyapi.com/api/character/')
+  getCards('https://rickandmortyapi.com/api/character/?page=1')
 })
 
 function getCards(url: string) {
@@ -112,7 +130,7 @@ function cardModifier(card: Card, episode: Episode) {
   background-color: #21242b;
   width: 80%;
   padding-top: 100px;
-  padding-bottom: 100px;
+  padding-bottom: 30px;
 }
 
 .button-container {
@@ -124,7 +142,7 @@ function cardModifier(card: Card, episode: Episode) {
 button {
   background-color: #3498db;
   color: white;
-  border: 3px solid black;
+  border: none;
   padding: 20px 40px;
   font-size: 1.2rem;
   cursor: pointer;

@@ -53,7 +53,7 @@ defineProps<Props>()
 
 function statusClass(status: string) {
   if (status === 'Alive') return 'status-alive'
-  if (status === 'Dead') return 'status-dead'
+  else if (status === 'Dead') return 'status-dead'
   else return 'status-unknown'
 }
 </script>

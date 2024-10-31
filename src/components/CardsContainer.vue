@@ -55,6 +55,20 @@ interface Episode {
   name: string
 }
 
+interface Results {
+  id: number
+  image: string
+  url: string
+  name: string
+  status: string
+  species: string
+  location: {
+    url: string
+    name: string
+  }
+  episode: string[]
+}
+
 type Page = {
   next?: string
   prev?: string
@@ -69,45 +83,129 @@ onMounted(() => {
   getCards('https://rickandmortyapi.com/api/character/?page=1')
 })
 
-function getCards(url: string) {
-  fetch(url)
+async function getCards(url: string) {
+  /**
+   * const characters = getCharacters(...)
+   * const cards = characters.filter(isCharacter).map(toCard)
+   * const cardsWithFirstEpisode = cards.map(card => {
+   *    const episode = getEpisode(card)
+   *    return cardModifier(card, episode)
+   * })
+   * cards.value = cardsWithFirstEpisode
+   */
+
+  const [info, characters] = await fetchCharacters(url)
+  const charactersCards = characters
+    .filter(r => isResults(r))
+    .map(r => resultsToCard(r))
+  const cardsWithFirstEpisode = charactersCards.map(async card => {
+    if (card.episode.length > 0) {
+      const episode = await getEpisodeAsync(card.episode[0])
+      return cardModifier(card, episode)
+    }
+    return card
+  })
+  const awaitedCards = await Promise.all(cardsWithFirstEpisode)
+
+  cards.value = awaitedCards
+
+  if (isPage(info)) page.value = info
+}
+
+function cardModifier(card: Card, episode: Episode): Card {
+  card = {
+    ...card,
+    firstEpisode: { link: episode.url, name: episode.name },
+  }
+  return card
+}
+
+function isPage(page: unknown): page is Page {
+  return (
+    (page as Page).next !== undefined &&
+    (page as Page).prev !== undefined &&
+    (page as Page).pages !== undefined
+  )
+}
+
+function isResults(results: unknown): results is Results {
+  return (
+    (results as Results).name !== undefined &&
+    (results as Results).episode !== undefined &&
+    (results as Results).id !== undefined &&
+    (results as Results).image !== undefined &&
+    (results as Results).location !== undefined &&
+    (results as Results).species !== undefined &&
+    (results as Results).status !== undefined &&
+    (results as Results).url !== undefined
+  )
+}
+
+function resultsToCard(results: Results): Card {
+  return {
+    id: results.id,
+    episode: results.episode,
+    image: results.image,
+    location: results.location,
+    name: results.name,
+    species: results.species,
+    status: results.status,
+    url: results.url,
+  }
+}
+
+function getEpisode(url: string): Promise<Episode> {
+  return fetch(url)
     .then(response => {
       if (!response.ok) {
-        throw new Error('errore nella richiesta')
+        throw new Error("errore nella richiesta dell'url")
       }
       return response.json()
-    })
-    .then(data => {
-      cards.value = data.results
-      page.value = data.info
-
-      for (let i = 0; i < data.results.length; i++) {
-        fetch(cards.value[i].episode[0])
-          .then(response => {
-            if (!response.ok) {
-              throw new Error("errore nella richiesta dell'url")
-            }
-            return response.json()
-          })
-          .then(data => {
-            cards.value[i] = cardModifier(cards.value[i], data)
-          })
-          .catch(er => {
-            error.value = er.message
-          })
-      }
     })
     .catch(er => {
       error.value = er.message
     })
 }
 
-function cardModifier(card: Card, episode: Episode) {
-  card = {
-    ...card,
-    firstEpisode: { link: episode.url, name: episode.name },
+async function getEpisodeAsync(url: string): Promise<Episode> {
+  const response = await fetch(url)
+  if (!response.ok) throw new Error('Erroe nella richiesta')
+  const data = await response.json()
+  if (isEpisode(data)) {
+    return data
+  } else {
+    throw new Error('Il risultato non è di tipo Episode')
   }
-  return card
+}
+
+function isEpisode(episode: unknown): episode is Episode {
+  return (
+    (episode as Episode).url !== undefined &&
+    (episode as Episode).name !== undefined
+  )
+}
+// function fetchCharacters(url: string): Promise<unknown[]> {
+//   return fetch(url)
+//     .then(response => {
+//       if (!response.ok) {
+//         throw new Error('errore nella richiesta')
+//       }
+//       return response.json()
+//     })
+//     .then(data => {
+//       const characters = data?.results
+//       return Array.isArray(characters) ? characters : []
+//     })
+// }
+
+async function fetchCharacters(url: string): Promise<[unknown, unknown[]]> {
+  const response = await fetch(url)
+  if (!response.ok) throw new Error('errore nella richiesta')
+  const data = await response.json()
+  const results = data?.results
+  const characters = Array.isArray(results) ? results : []
+  const info = data?.info
+  return [info, characters]
 }
 </script>
 

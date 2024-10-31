@@ -3,14 +3,14 @@
     <HeaderSection></HeaderSection>
 
     <div class="lower-section">
-      <FourDivs></FourDivs>
+      <CardsContainer></CardsContainer>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import HeaderSection from './components/HeaderSection.vue'
-import FourDivs from './components/CardsContainer.vue'
+import CardsContainer from './components/CardsContainer.vue'
 </script>
 
 <style>

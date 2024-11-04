@@ -11,13 +11,13 @@
         </p>
       </section>
       <section>
-        <h5>Last known location:</h5>
+        <h3>Last known location:</h3>
         <a class="hover-effect" :href="card.location.url" target="_blank">{{
           card.location.name
         }}</a>
       </section>
       <section v-if="card.firstEpisode">
-        <h5>First seen in:</h5>
+        <h3>First seen in:</h3>
         <a class="hover-effect" :href="card.firstEpisode.link" target="_blank">
           {{ card.firstEpisode.name }}
         </a>
@@ -97,6 +97,7 @@ function statusClass(status: string) {
     'Helvetica', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol';
   font-size: large;
+  height: 240px;
 }
 
 .holder div {
@@ -116,9 +117,10 @@ function statusClass(status: string) {
   margin: 0;
 }
 
-.holder div section h5 {
+.holder div section h3 {
+  font-weight: 400;
+  font-size: 20px;
   margin: 0px;
-  font-weight: 50px;
   letter-spacing: 0.7px;
   color: grey;
 }
@@ -131,7 +133,7 @@ function statusClass(status: string) {
 
 .holder img {
   border-radius: 15px 0 0 15px;
-  height: 240px;
+  height: 100%;
 }
 
 .hover-effect:hover {

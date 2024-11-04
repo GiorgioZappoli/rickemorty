@@ -1,11 +1,8 @@
 <template>
-  <div class="app-container">
+  <main>
     <HeaderSection></HeaderSection>
-
-    <div class="lower-section">
-      <CardsContainer></CardsContainer>
-    </div>
-  </div>
+    <CardsContainer></CardsContainer>
+  </main>
 </template>
 
 <script setup lang="ts">
@@ -19,12 +16,5 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-}
-
-.app-container {
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 </style>

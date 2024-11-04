@@ -1,29 +1,19 @@
 <template>
   <header class="header-section">
-    <h1>{{ title }}</h1>
+    <h1>The Rick And Morty API</h1>
   </header>
 </template>
-
-<script lang="ts" setup>
-import { ref } from 'vue'
-
-const title = ref()
-title.value = 'The Rick And Morty API'
-</script>
 
 <style>
 .header-section {
   padding: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   text-align: center;
   background-color: rgb(245, 245, 245);
 }
 
 h1 {
   font-size: 100px;
-  margin: 0%;
+  margin: 0;
   text-align: center;
   font-weight: 900;
   font-family: -apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Roboto',

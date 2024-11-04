@@ -4,8 +4,8 @@
     <div>
       <section>
         <a class="hover-effect" :href="card.url">
-          <h2>{{ card.name }}</h2>
-        </a>
+          <h2>{{ card.name }}</h2></a
+        >
         <p :class="['status-row', statusClass(card.status)]">
           {{ card.status }} - {{ card.species }}
         </p>
@@ -108,14 +108,12 @@ function statusClass(status: string) {
 }
 
 .holder div section {
-  margin: 0;
   padding-left: 15px;
 }
 
 .holder div section h2 {
   font-size: xx-large;
   margin: 0;
-  margin-bottom: 0px;
 }
 
 .holder div section h5 {
@@ -134,11 +132,6 @@ function statusClass(status: string) {
 .holder img {
   border-radius: 15px 0 0 15px;
   height: 240px;
-}
-
-.name {
-  font-weight: 1000;
-  list-style: none;
 }
 
 .hover-effect:hover {

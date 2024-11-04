@@ -1,12 +1,11 @@
 <template>
   <div class="wrapper">
-    <h2></h2>
     <div class="cards-containers">
-      <CardsComponent
+      <CardComponent
         v-for="card in cards"
         :key="card.id"
         :card="card"
-      ></CardsComponent>
+      ></CardComponent>
     </div>
     <div class="button-container">
       <button
@@ -46,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import CardsComponent from './CardComponent.vue'
+import CardComponent from './CardComponent.vue'
 import { ref, onMounted } from 'vue'
 import type { Card } from './CardComponent.vue'
 
@@ -76,7 +75,6 @@ type Page = {
 }
 
 const cards = ref<Card[]>([])
-const error = ref(null)
 const page = ref<Page>({})
 
 onMounted(() => {
@@ -84,23 +82,13 @@ onMounted(() => {
 })
 
 async function getCards(url: string) {
-  /**
-   * const characters = getCharacters(...)
-   * const cards = characters.filter(isCharacter).map(toCard)
-   * const cardsWithFirstEpisode = cards.map(card => {
-   *    const episode = getEpisode(card)
-   *    return cardModifier(card, episode)
-   * })
-   * cards.value = cardsWithFirstEpisode
-   */
-
   const [info, characters] = await fetchCharacters(url)
   const charactersCards = characters
     .filter(r => isResults(r))
     .map(r => resultsToCard(r))
   const cardsWithFirstEpisode = charactersCards.map(async card => {
     if (card.episode.length > 0) {
-      const episode = await getEpisodeAsync(card.episode[0])
+      const episode = await getEpisode(card.episode[0])
       return cardModifier(card, episode)
     }
     return card
@@ -154,20 +142,7 @@ function resultsToCard(results: Results): Card {
   }
 }
 
-function getEpisode(url: string): Promise<Episode> {
-  return fetch(url)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error("errore nella richiesta dell'url")
-      }
-      return response.json()
-    })
-    .catch(er => {
-      error.value = er.message
-    })
-}
-
-async function getEpisodeAsync(url: string): Promise<Episode> {
+async function getEpisode(url: string): Promise<Episode> {
   const response = await fetch(url)
   if (!response.ok) throw new Error('Erroe nella richiesta')
   const data = await response.json()
@@ -184,20 +159,6 @@ function isEpisode(episode: unknown): episode is Episode {
     (episode as Episode).name !== undefined
   )
 }
-// function fetchCharacters(url: string): Promise<unknown[]> {
-//   return fetch(url)
-//     .then(response => {
-//       if (!response.ok) {
-//         throw new Error('errore nella richiesta')
-//       }
-//       return response.json()
-//     })
-//     .then(data => {
-//       const characters = data?.results
-//       return Array.isArray(characters) ? characters : []
-//     })
-// }
-
 async function fetchCharacters(url: string): Promise<[unknown, unknown[]]> {
   const response = await fetch(url)
   if (!response.ok) throw new Error('errore nella richiesta')
@@ -212,12 +173,7 @@ async function fetchCharacters(url: string): Promise<[unknown, unknown[]]> {
 <style scoped>
 .wrapper {
   background-color: #21242b;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 50px 0;
+  padding: 150px 10% 50px 10%;
 }
 
 .cards-containers {
@@ -225,10 +181,7 @@ async function fetchCharacters(url: string): Promise<[unknown, unknown[]]> {
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(1fr, 1fr, 1fr);
   grid-gap: 30px;
-  background-color: #21242b;
-  width: 80%;
-  padding-top: 100px;
-  padding-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .button-container {
@@ -244,7 +197,7 @@ button {
   padding: 20px 40px;
   font-size: 1.2rem;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 10px;
   flex: 1;
   max-width: 200px;
 }

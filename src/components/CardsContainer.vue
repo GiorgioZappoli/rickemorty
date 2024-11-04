@@ -173,7 +173,7 @@ async function fetchCharacters(url: string): Promise<[unknown, unknown[]]> {
 <style scoped>
 .wrapper {
   background-color: #21242b;
-  padding: 150px 10% 50px 10%;
+  padding: 100px 10% 50px 10%;
 }
 
 .cards-containers {

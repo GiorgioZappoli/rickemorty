@@ -6,7 +6,7 @@
 
 <style>
 .header-section {
-  padding: 30px;
+  padding: 50px;
   text-align: center;
   background-color: rgb(245, 245, 245);
 }

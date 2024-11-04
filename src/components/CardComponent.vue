@@ -3,7 +3,7 @@
     <img :src="card.image" alt="immagine" />
     <div>
       <section>
-        <a class="hover-effect" :href="card.url">
+        <a class="hover-effect" :href="card.url" target="_blank">
           <h2>{{ card.name }}</h2></a
         >
         <p :class="['status-row', statusClass(card.status)]">
@@ -12,13 +12,13 @@
       </section>
       <section>
         <h5>Last known location:</h5>
-        <a class="hover-effect" :href="card.location.url">{{
+        <a class="hover-effect" :href="card.location.url" target="_blank">{{
           card.location.name
         }}</a>
       </section>
       <section v-if="card.firstEpisode">
         <h5>First seen in:</h5>
-        <a class="hover-effect" :href="card.firstEpisode.link">
+        <a class="hover-effect" :href="card.firstEpisode.link" target="_blank">
           {{ card.firstEpisode.name }}
         </a>
       </section>
@@ -75,15 +75,15 @@ function statusClass(status: string) {
 }
 
 .status-alive::before {
-  background-color: green;
+  background-color: #55cc44;
 }
 
 .status-dead::before {
-  background-color: red;
+  background-color: #d63d2e;
 }
 
 .status-unknown::before {
-  background-color: gray;
+  background-color: #9e9e9e;
 }
 
 .holder {

@@ -78,7 +78,7 @@ const cards = ref<Card[]>([])
 const page = ref<Page>({})
 
 onMounted(() => {
-  getCards('https://rickandmortyapi.com/api/character/?page=1')
+  getCards('http://localhost:8080/data')
 })
 
 async function getCards(url: string) {

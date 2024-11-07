@@ -1,0 +1,137 @@
+openapi: 3.0.3
+
+info:
+  title: Rick & Morty API
+  description: API to get informations about characters
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Main API url
+
+paths:
+  /characters:
+    get:
+      summary: Get list of all characters
+      description: Receive a list af all characters
+      parameters:
+        - in: query
+          name: page
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: number of the page
+
+      responses:
+        '200':
+          description: A json array of characters objects
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Character'
+
+components:
+  schemas:
+    Character:
+      type: object
+      required:
+        - info
+        - results
+      properties:
+        info:
+          type: object
+          required:
+            - count
+            - pages
+            - next
+            - prev
+          properties:
+            count:
+              type: integer
+              example: 862
+            pages:
+              type: integer
+              example: 42
+            next:
+              description: link to the next page
+              type: string
+              example: https://rickandmortyapi.com/api/character/?page=2
+            prev:
+              description: link to the previous page
+              type: string
+              example: https://rickandmortyapi.com/api/character/?page=1
+        results:
+          type: object
+          required:
+            - id
+            - name 
+            - status
+            - species 
+            - gender 
+            - url
+            - created
+            - type
+            - image
+          properties:
+            id:
+              type: integer
+              example: 1
+            name:
+              type: string
+              example: Rick Sanchez
+            status:
+              type: string
+              example: Alive
+            species:
+              type: string
+              example: human
+            type:
+              type: string
+              example: Superhuman (Ghost trains summoner)
+            gender:
+              type: string 
+              enum: 
+                - Male
+                - Female
+                - unknown
+              example: Male
+            origin:
+              required:
+                - name 
+              description: location of origin of a character
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: earth
+                url:
+                  type: string
+                  example: https://rickandmortyapi.com/api/location/1
+            location:
+
+              description: last known location of the character
+              type: object
+              required:
+                - name
+                - url 
+              properties:
+                name:
+                  type: string
+                  example: earth
+                url:
+                  type: string
+                  example: https://rickandmortyapi.com/api/location/1
+            image:
+              type: string
+              example: https://rickandmortyapi.com/api/character/avatar/1.jpeg
+            episode:
+              type: string
+              example: https://rickandmortyapi.com/api/episode/1
+            url:
+              type: string
+              example: https://rickandmortyapi.com/api/character/1
+            created:
+              type: string
+              example: 2017-11-04T18:48:46.250Z

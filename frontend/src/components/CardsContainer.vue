@@ -78,7 +78,7 @@ const cards = ref<Card[]>([])
 const page = ref<Page>({})
 
 onMounted(() => {
-  getCards('http://localhost:8080/data')
+  getCards('http://localhost:8080/characters')
 })
 
 async function getCards(url: string) {

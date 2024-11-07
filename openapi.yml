@@ -1,5 +1,4 @@
 openapi: 3.0.3
-
 info:
   title: Rick & Morty API
   description: API to get informations about characters
@@ -72,8 +71,8 @@ components:
             - gender 
             - url
             - created
-            - type
             - image
+            - location
           properties:
             id:
               type: integer
@@ -83,6 +82,11 @@ components:
               example: Rick Sanchez
             status:
               type: string
+              description: current status of the character
+              enum:
+                - Alive
+                - Dead
+                - unknown
               example: Alive
             species:
               type: string
@@ -110,7 +114,6 @@ components:
                   type: string
                   example: https://rickandmortyapi.com/api/location/1
             location:
-
               description: last known location of the character
               type: object
               required:
@@ -127,8 +130,10 @@ components:
               type: string
               example: https://rickandmortyapi.com/api/character/avatar/1.jpeg
             episode:
-              type: string
-              example: https://rickandmortyapi.com/api/episode/1
+              type: array
+              items:
+                type: string
+                example: https://rickandmortyapi.com/api/episode/1
             url:
               type: string
               example: https://rickandmortyapi.com/api/character/1

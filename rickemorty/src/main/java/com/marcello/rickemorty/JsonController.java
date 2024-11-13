@@ -1,32 +1,29 @@
 package com.marcello.rickemorty;
 
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
-import java.io.IOException;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
 public class JsonController {
+
+    @Autowired
+    private CharacterRepository characterRepository;
     
     @GetMapping("/characters")
-    public ResponseEntity<String> getJsonData(@RequestParam(value = "page", defaultValue = "1") int page) throws IOException{
+    public ResponseEntity<List<Character>> getJsonData(@RequestParam(value = "page", defaultValue = "1") int page){
         if (page < 1 || page > 42) {
-            return ResponseEntity.badRequest().body("This page does not exists");
+            return ResponseEntity.badRequest().body(null);
         }
         
-        String filename = "pages/page" + page + ".json";    
-        ClassPathResource jsonResource = new ClassPathResource(filename);
-
-        if (!jsonResource.exists()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        String jsonData = new String(jsonResource.getInputStream().readAllBytes());
-        return ResponseEntity.ok(jsonData);
+        List<Character> characters = characterRepository.findAll();
+        return characters.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(characters);
     }
 
 }

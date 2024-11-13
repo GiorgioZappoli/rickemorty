@@ -3,16 +3,14 @@
     <div class="cards-containers">
       <CardComponent
         v-for="card in cards"
-        :key="card.id"
+        :key="card.name"
         :card="card"
       ></CardComponent>
     </div>
     <div class="button-container">
       <button
         :disabled="!page.prev"
-        @click="
-          getCards(`https://rickandmortyapi.com/api/character/?page=${1}`)
-        "
+        @click="getCards(`http://localhost:9000/characters`)"
       >
         First
       </button>
@@ -32,11 +30,7 @@
       </button>
       <button
         :disabled="!page.next"
-        @click="
-          getCards(
-            `https://rickandmortyapi.com/api/character/?page=${page.pages}`,
-          )
-        "
+        @click="getCards(`http://localhost:9000/characters`)"
       >
         Last
       </button>
@@ -78,7 +72,7 @@ const cards = ref<Card[]>([])
 const page = ref<Page>({})
 
 onMounted(() => {
-  getCards('http://localhost:9000/characters')
+  getCards('http://localhost:9000/characters/page/1')
 })
 
 async function getCards(url: string) {

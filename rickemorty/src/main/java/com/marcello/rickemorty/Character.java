@@ -13,8 +13,10 @@ import java.util.List;
 @Getter
 @Setter
 public class Character {
-    @Id
-    private String id;
+
+    private @Id String _id;
+
+    private int id;
     private String name;
     private String status;
     private String species;

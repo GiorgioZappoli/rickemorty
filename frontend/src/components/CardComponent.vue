@@ -4,21 +4,21 @@
     <div>
       <section>
         <a class="hover-effect" :href="card.url" target="_blank">
-          <h2>{{ card.name }}</h2></a
-        >
+          <h2>{{ card.name }}</h2>
+        </a>
         <p :class="['status-row', statusClass(card.status)]">
           {{ card.status }} - {{ card.species }}
         </p>
       </section>
       <section>
         <h3>Last known location:</h3>
-        <a class="hover-effect" :href="card.location.url" target="_blank">{{
-          card.location.name
-        }}</a>
+        <a class="hover-effect" :href="card.location.url" target="_blank">
+          {{ card.location.name }}
+        </a>
       </section>
       <section v-if="card.firstEpisode">
         <h3>First seen in:</h3>
-        <a class="hover-effect" :href="card.firstEpisode.link" target="_blank">
+        <a class="hover-effect" href="#/episodes">
           {{ card.firstEpisode.name }}
         </a>
       </section>

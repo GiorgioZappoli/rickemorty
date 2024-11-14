@@ -29,11 +29,11 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Character'
+                  $ref: '#/components/schemas/Characters'
 
 components:
   schemas:
-    Character:
+    Characters:
       type: object
       required:
         - info

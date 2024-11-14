@@ -10,7 +10,7 @@
     <div class="button-container">
       <button
         :disabled="!page.prev"
-        @click="getCards(`http://localhost:9000/characters`)"
+        @click="getCards(`http://localhost:9000/characters?page=1`)"
       >
         First
       </button>
@@ -30,7 +30,7 @@
       </button>
       <button
         :disabled="!page.next"
-        @click="getCards(`http://localhost:9000/characters`)"
+        @click="getCards(`http://localhost:9000/characters?page=42`)"
       >
         Last
       </button>

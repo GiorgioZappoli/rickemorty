@@ -11,9 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
-import java.util.Map;
-import java.util.HashMap;
-
 @RestController
 @CrossOrigin(origins = "*")
 public class JsonController {
@@ -24,7 +21,7 @@ public class JsonController {
     private static final int PAGE_SIZE = 20;
 
     @GetMapping("/characters")
-    public ResponseEntity<Map<String, Object>> getPaginationData(
+    public ResponseEntity<CharactersResponse> getPaginationData(
             @RequestParam(value = "page", defaultValue = "1") int page) {
 
         if (page < 1 || page > 42) {
@@ -32,16 +29,18 @@ public class JsonController {
         }
 
         PageRequest pageRequest = PageRequest.of(page - 1, PAGE_SIZE, Sort.by(Direction.ASC, "id"));
-
         Page<Character> charactersPage = characterRepository.findAll(pageRequest);
 
-        long totalElements = characterRepository.count();
-        int totalPages = (int) Math.ceil((double) totalElements / PAGE_SIZE);
+        CharactersResponse response = new CharactersResponse();
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("results", charactersPage.getContent());
-        response.put("totalElements", totalElements);
-        response.put("totalPages", totalPages);
+        CharactersResponse.Info info = new CharactersResponse.Info();
+        info.setCount((int) characterRepository.count());
+        info.setPages((int) Math.ceil((double) info.getCount() / PAGE_SIZE));
+        info.setNext(page < info.getPages() ? "http://localhost:9000/characters?page=" + (page + 1) : null);
+        info.setPrev(page > 1 ? "http://localhost:9000/characters?page=" + (page - 1) : null);
+
+        response.setInfo(info);
+        response.setResults(charactersPage.getContent());
 
         return ResponseEntity.ok(response);
     }

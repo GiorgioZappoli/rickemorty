@@ -1,24 +1,22 @@
-<template>
-  <main>
-    <HeaderSection></HeaderSection>
-    <CardsContainer></CardsContainer>
-  </main>
-</template>
-
 <script setup lang="ts">
-import HeaderSection from './components/HeaderSection.vue'
-import CardsContainer from './components/CardsContainer.vue'
+import { ref, computed } from 'vue'
+import Characters from './views/CharactersView.vue'
+
+const routes: Record<string, unknown> = {
+  '/': Characters,
+}
+
+const currentPath = ref(window.location.hash)
+
+window.addEventListener('hashchange', () => {
+  currentPath.value = window.location.hash
+})
+
+const currentView = computed(() => {
+  return routes[currentPath.value.slice(1) || '/']
+})
 </script>
 
-<style>
-html,
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-::selection {
-  background: black;
-  color: rgb(255, 152, 0);
-}
-</style>
+<template>
+  <component :is="currentView" />
+</template>

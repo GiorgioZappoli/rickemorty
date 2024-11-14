@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -22,7 +23,7 @@ public class JsonController {
 
     @GetMapping("/characters")
     public ResponseEntity<CharactersResponse> getPaginationData(
-            @RequestParam(value = "page", defaultValue = "1") int page) {
+            @RequestParam(required = false, defaultValue = "1") int page) {
 
         if (page < 1 || page > 42) {
             return ResponseEntity.badRequest().body(null);

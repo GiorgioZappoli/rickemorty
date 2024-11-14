@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
-public class JsonController {
+public class CharactersController {
 
     @Autowired
     private CharacterRepository characterRepository;

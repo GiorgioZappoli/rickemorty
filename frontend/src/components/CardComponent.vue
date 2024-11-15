@@ -18,9 +18,11 @@
       </section>
       <section v-if="card.firstEpisode">
         <h3>First seen in:</h3>
-        <a class="hover-effect" href="#/episodes">
-          {{ card.firstEpisode.name }}
-        </a>
+        <RouterLink
+          :to="`/episodes/${card.firstEpisode.id}`"
+          class="hover-effect"
+          >{{ card.firstEpisode.name }}
+        </RouterLink>
       </section>
     </div>
   </div>
@@ -41,6 +43,7 @@ export interface Card {
   firstEpisode?: {
     link: string
     name: string
+    id: number
   }
   episode: string[]
 }

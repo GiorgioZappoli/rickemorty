@@ -1,6 +1,5 @@
 <template>
   <HeaderSection></HeaderSection>
-  <a href="#/episodes">Episodes</a>
   <CardsContainer></CardsContainer>
 </template>
 

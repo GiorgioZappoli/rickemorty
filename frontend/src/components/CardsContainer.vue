@@ -40,12 +40,13 @@
 
 <script lang="ts" setup>
 import CardComponent from './CardComponent.vue'
-import { ref, onMounted } from 'vue'
 import type { Card } from './CardComponent.vue'
+import { ref, onMounted } from 'vue'
 
 interface Episode {
   url: string
   name: string
+  id: number
 }
 
 interface Results {
@@ -97,7 +98,7 @@ async function getCards(url: string) {
 function cardModifier(card: Card, episode: Episode): Card {
   card = {
     ...card,
-    firstEpisode: { link: episode.url, name: episode.name },
+    firstEpisode: { link: episode.url, name: episode.name, id: episode.id },
   }
   return card
 }
@@ -150,7 +151,8 @@ async function getEpisode(url: string): Promise<Episode> {
 function isEpisode(episode: unknown): episode is Episode {
   return (
     (episode as Episode).url !== undefined &&
-    (episode as Episode).name !== undefined
+    (episode as Episode).name !== undefined &&
+    (episode as Episode).id !== undefined
   )
 }
 async function fetchCharacters(url: string): Promise<[unknown, unknown[]]> {

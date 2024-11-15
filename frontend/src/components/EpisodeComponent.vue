@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 
 export interface Episode {
   url: string
@@ -17,12 +17,34 @@ export interface Episode {
   characters: string[]
 }
 
+const props = defineProps<{ episodeId: number }>()
 const data = ref<Episode>()
 
+watch(
+  () => props.episodeId,
+  async newId => {
+    if (newId) {
+      await fetchEpisodeData(newId)
+    }
+  },
+)
+
 onMounted(async () => {
-  const episode = await getEpisode('https://rickandmortyapi.com/api/episode/1')
-  data.value = episode
+  if (props.episodeId) {
+    await fetchEpisodeData(props.episodeId)
+  }
 })
+
+async function fetchEpisodeData(Id: number) {
+  try {
+    const episode = await getEpisode(
+      `https://rickandmortyapi.com/api/episode/${Id}`,
+    )
+    data.value = episode
+  } catch (error) {
+    console.error('error in the loading', error)
+  }
+}
 
 async function getEpisode(url: string): Promise<Episode> {
   const response = await fetch(url)

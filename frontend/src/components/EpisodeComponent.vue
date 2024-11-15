@@ -1,9 +1,19 @@
 <template>
-  <h1>{{ data?.name }}</h1>
-  <p>Air Date</p>
-  <p>{{ data?.air_date }}</p>
-  <p>{{ data?.episode }}</p>
-  <p>Number of characters in this episode: {{ data?.characters.length }}</p>
+  <div class="wrapper">
+    <div class="episode-container">
+      <h1>{{ data?.name }}</h1>
+      <ul>
+        <li class="gray">Air Date:</li>
+        <li>{{ data?.air_date }}</li>
+        <li class="gray">Episode:</li>
+        <li>
+          {{ data?.episode }}
+        </li>
+        <li class="gray">Number of characters in this episode:</li>
+        <li class="last-row">{{ data?.characters.length }}</li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -67,3 +77,38 @@ function isEpisode(episode: unknown): episode is Episode {
   )
 }
 </script>
+
+<style scoped>
+.wrapper {
+  background-color: rgb(33, 36, 43);
+  padding-top: 100px;
+}
+.episode-container {
+  background-color: rgb(50, 55, 65);
+  color: white;
+  width: 60%;
+  margin: 0 auto;
+  border-radius: 15px;
+  height: inherit;
+  font-family: -apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Roboto',
+    'Helvetica', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol';
+  font-size: large;
+}
+
+ul {
+  list-style: none;
+  padding-left: 40%;
+  text-align: left;
+}
+li {
+  margin-bottom: 20px;
+}
+.last-row {
+  padding-bottom: 50px;
+}
+.gray {
+  color: gray;
+  margin-bottom: 0px;
+}
+</style>

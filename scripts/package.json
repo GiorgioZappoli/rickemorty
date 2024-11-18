@@ -1,6 +1,17 @@
 {
-  "type": "module",
+  "type": "commonjs",
+  "scripts": {
+    "ts": "esr"
+  },
   "dependencies": {
-    "mongodb": "^6.10.0"
+    "mongodb": "^6.10.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "esbuild": "^0.24.0",
+    "esbuild-runner": "^2.2.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
   }
 }
